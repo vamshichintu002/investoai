@@ -96,30 +96,29 @@ export function Sidebar({ isOpen, onToggle, currentPage, onPageChange }: Sidebar
             <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-8">
               Investment Analytics
             </h1>
-            <nav className="space-y-2">
+            <nav className="flex-1 space-y-2">
               <button
                 onClick={() => onPageChange('portfolio')}
                 className={clsx(
-                  'w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors',
-                  currentPage === 'portfolio'
-                    ? 'bg-blue-600/10 text-blue-600'
-                    : 'text-secondary hover:bg-hover'
+                  'w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors',
+                  'text-foreground hover:bg-accent/10',
+                  currentPage === 'portfolio' && 'bg-accent/20'
                 )}
               >
                 <Wallet className="w-5 h-5" />
-                Portfolio
+                <span className="font-medium">Portfolio</span>
               </button>
+
               <button
                 onClick={() => onPageChange('other')}
                 className={clsx(
-                  'w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors',
-                  currentPage === 'other'
-                    ? 'bg-blue-600/10 text-blue-600'
-                    : 'text-secondary hover:bg-hover'
+                  'w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors',
+                  'text-foreground hover:bg-accent/10',
+                  currentPage === 'other' && 'bg-accent/20'
                 )}
               >
                 <Coins className="w-5 h-5" />
-                Other Investment Options
+                <span className="font-medium">Other Investment Options</span>
               </button>
             </nav>
           </div>
@@ -127,11 +126,11 @@ export function Sidebar({ isOpen, onToggle, currentPage, onPageChange }: Sidebar
           {/* Did You Know Section */}
           <div className="mt-auto p-6 border-t border-border/40">
             <div className="bg-card/50 rounded-lg p-4 backdrop-blur-sm border border-border/40">
-              <div className="flex items-center gap-2 mb-2 text-blue-600">
-                <Lightbulb className="w-4 h-4" />
-                <h3 className="text-sm font-semibold">Did You Know?</h3>
+              <div className="flex items-center gap-2 mb-2">
+                <Lightbulb className="w-4 h-4 text-yellow-500" />
+                <span className="text-sm font-medium text-foreground">Did You Know?</span>
               </div>
-              <p className="text-xs text-secondary leading-relaxed">
+              <p className="text-sm text-foreground/80 leading-relaxed">
                 {didYouKnowFacts[currentFact]}
               </p>
             </div>

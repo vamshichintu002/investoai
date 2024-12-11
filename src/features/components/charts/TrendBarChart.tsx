@@ -19,15 +19,15 @@ export function TrendBarChart({ data }: TrendBarChartProps) {
 
     return (
       <div className="bg-card border border-border rounded-lg shadow-lg p-3">
-        <p className="font-medium text-sm mb-2">{label}</p>
+        <p className="font-medium text-sm mb-2 text-foreground">{label}</p>
         {payload.map((entry: any, index: number) => (
           <div key={index} className="flex items-center gap-2 text-xs">
             <div 
               className="w-2 h-2 rounded-full" 
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-secondary">{entry.name}:</span>
-            <span className="font-medium">{entry.value}%</span>
+            <span className="text-foreground/70">{entry.name}:</span>
+            <span className="font-medium text-foreground">{entry.value}%</span>
           </div>
         ))}
       </div>
@@ -50,21 +50,23 @@ export function TrendBarChart({ data }: TrendBarChartProps) {
           <XAxis 
             dataKey="name" 
             axisLine={false}
-            tickLine={false}
+            tickLine={{ stroke: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' }}
             tick={{ 
-              fill: 'var(--text-secondary)',
+              fill: theme === 'dark' ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.9)',
               fontSize: 12
             }}
             dy={8}
           />
           <YAxis 
             axisLine={false}
-            tickLine={false}
+            tickLine={{ stroke: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' }}
             tick={{ 
-              fill: 'var(--text-secondary)',
+              fill: theme === 'dark' ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.9)',
               fontSize: 12
             }}
             dx={-8}
+            domain={[0, 100]}
+            tickCount={6}
           />
           <Tooltip 
             content={<CustomTooltip />}

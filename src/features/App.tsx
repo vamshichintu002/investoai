@@ -16,6 +16,7 @@ import { ErrorMessage } from './components/ui/ErrorMessage';
 import { ChatWidget } from './components/ChatWidget';
 import { DashboardHeader } from './components/DashboardHeader';
 import { OtherInvestments } from './pages/OtherInvestments';
+import { AlertTriangle } from './components/ui/AlertTriangle';
 import '@/features/investment/styles/theme.css';
 
 
@@ -84,10 +85,13 @@ function App() {
 
                   <RecommendedInvestments recommendations={data.recommendations} />
 
-                  <Card className="bg-opacity-50">
-                    <p className="text-xs sm:text-sm text-secondary italic leading-relaxed">
-                      {data.disclaimer}
-                    </p>
+                  <Card className="bg-muted">
+                    <div className="flex items-center gap-3">
+                      <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0" />
+                      <p className="text-xs sm:text-sm text-foreground/80 italic leading-relaxed">
+                        {data.disclaimer}
+                      </p>
+                    </div>
                   </Card>
                 </>
               ) : (

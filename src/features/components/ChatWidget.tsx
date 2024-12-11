@@ -5,7 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { ChatMessage, sendChatMessage } from '../services/chatService';
 
 const WELCOME_MESSAGE: ChatMessage = {
-  text: "Hello! I am your investo assistant created by Mavericks.",
+  text: "Hey! I'm your financial assistant. How can I help you today?",
   isUser: false,
   timestamp: new Date()
 };
@@ -14,6 +14,7 @@ export function ChatWidget() {
   const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [showPreview, setShowPreview] = useState(true);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_MESSAGE]);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,18 +79,39 @@ export function ChatWidget() {
 
   if (!isOpen) {
     return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className={clsx(
-          'fixed z-50 p-4 rounded-full shadow-lg transition-all duration-300',
-          'hover:scale-110 hover:shadow-xl',
-          'bg-gradient-to-r from-blue-600 to-blue-500 text-white',
-          'bottom-4 right-4 sm:bottom-6 sm:right-6'
+      <>
+        {!isOpen && showPreview && (
+          <div 
+            className={clsx(
+              'fixed bottom-20 right-4 max-w-[240px] p-4 rounded-lg shadow-lg',
+              'bg-card border border-border/40 backdrop-blur-sm',
+              'animate-fade-in transition-all duration-300'
+            )}
+            onMouseEnter={() => setShowPreview(false)}
+          >
+            <div className="flex items-start gap-3">
+              <Bot className="w-5 h-5 text-blue-500 flex-shrink-0 mt-1" />
+              <p className="text-sm text-foreground/90">{WELCOME_MESSAGE.text}</p>
+            </div>
+          </div>
         )}
-        aria-label="Open chat"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </button>
+
+        <button
+          onClick={() => {
+            setIsOpen(true);
+            setShowPreview(false);
+          }}
+          className={clsx(
+            'fixed z-50 p-4 rounded-full shadow-lg transition-all duration-300',
+            'hover:scale-110 hover:shadow-xl',
+            'bg-gradient-to-r from-blue-600 to-blue-500 text-white',
+            'bottom-4 right-4 sm:bottom-6 sm:right-6'
+          )}
+          aria-label="Open chat"
+        >
+          <MessageCircle className="w-6 h-6" />
+        </button>
+      </>
     );
   }
 

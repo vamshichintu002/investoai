@@ -137,9 +137,9 @@ export function OtherInvestments() {
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex flex-col gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-            Other Investment Options
-          </h1>
-          <p className="text-secondary">
+          Other Investment Options
+        </h1>
+          <p className="text-foreground/70">
             Explore alternative investment opportunities across various sectors and platforms.
           </p>
         </div>
@@ -148,35 +148,35 @@ export function OtherInvestments() {
           {investmentCategories.map((category) => (
             <Card key={category.title} className="overflow-hidden">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-blue-600/20 to-purple-600/20">
-                  <category.icon className="w-5 h-5 text-blue-600" />
+                <div className="p-2 rounded-lg bg-blue-500/10">
+                  <category.icon className="w-5 h-5 text-blue-500" />
                 </div>
-                <h2 className="text-lg font-semibold">{category.title}</h2>
+                <h2 className="text-lg font-semibold text-foreground">{category.title}</h2>
               </div>
 
               <div className="space-y-4">
                 {category.options.map((option) => (
                   <div
                     key={option.name}
-                    className="group p-4 rounded-lg transition-all duration-200 hover:bg-hover"
+                    className="group p-4 rounded-lg transition-all duration-200 hover:bg-muted"
                   >
                     <div className="flex flex-col gap-2">
                       <div className="flex items-start justify-between gap-4">
-                        <h3 className="font-medium">{option.name}</h3>
+                        <h3 className="font-medium text-foreground">{option.name}</h3>
                         <a
                           href={option.website}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={clsx(
                             "text-xs px-3 py-1 rounded-full transition-colors",
-                            "bg-gradient-to-r from-blue-600/10 to-purple-600/10",
-                            "text-blue-600 hover:from-blue-600 hover:to-purple-600 hover:text-white"
+                            "bg-blue-500/10 hover:bg-blue-500",
+                            "text-blue-500 hover:text-white"
                           )}
                         >
                           Visit Site
                         </a>
                       </div>
-                      <p className="text-sm text-secondary">{option.description}</p>
+                      <p className="text-sm text-foreground/70">{option.description}</p>
                     </div>
                   </div>
                 ))}
@@ -188,3 +188,5 @@ export function OtherInvestments() {
     </div>
   );
 }
+
+export default OtherInvestments;
