@@ -180,6 +180,40 @@ app.post('/api/sync-user', async (req, res) => {
   }
 });
 
+// Check form status endpoint
+app.post('/api/check-form-status', async (req, res) => {
+  try {
+    const { clerkId } = req.body;
+    
+    if (!clerkId) {
+      return res.status(400).json({ 
+        message: 'Missing clerkId parameter',
+        hasFilledForm: false 
+      });
+    }
+
+    // Check if user has form data
+    const formData = await prisma.form_details.findFirst({
+      where: { 
+        userId: clerkId,
+        submitted: true 
+      }
+    });
+
+    return res.json({ 
+      hasFilledForm: !!formData,
+      message: formData ? 'Form found' : 'No form found' 
+    });
+  } catch (error) {
+    console.error('Error in /api/check-form-status:', error);
+    res.status(500).json({ 
+      error: 'Failed to check form status',
+      hasFilledForm: false,
+      details: error.message 
+    });
+  }
+});
+
 // Submit form endpoint
 app.post('/api/submit-form', async (req, res) => {
   try {

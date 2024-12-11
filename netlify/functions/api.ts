@@ -143,6 +143,58 @@ export const handler: Handler = async (event, context) => {
       };
     }
 
+    // Check form status endpoint
+    if (event.httpMethod === 'GET' && event.path.startsWith('/.netlify/functions/api/check-form-status/')) {
+      const clerkId = event.path.split('/').pop();
+      
+      if (!clerkId) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ message: 'Missing clerkId parameter' })
+        };
+      }
+
+      try {
+        // First, find the user by clerkId
+        const user = await prisma.users.findUnique({
+          where: { clerkId },
+          select: {
+            id: true,
+            form_details: {
+              select: {
+                id: true
+              }
+            }
+          }
+        });
+
+        if (!user) {
+          return {
+            statusCode: 404,
+            headers,
+            body: JSON.stringify({ message: 'User not found' })
+          };
+        }
+
+        // Check if user has form details
+        const hasFilledForm = user.form_details !== null;
+
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ hasFilledForm })
+        };
+      } catch (error) {
+        console.error('Error checking form status:', error);
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({ message: 'Internal server error', error: error.message })
+        };
+      }
+    }
+
     // Submit form endpoint
     if (event.httpMethod === 'POST' && event.path === '/.netlify/functions/api/submit-form') {
       const { clerkId, formData } = JSON.parse(event.body || '{}');

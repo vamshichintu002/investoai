@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { Card } from '../features/components/ui/Card';
 import { AllocationPieChart } from '../features/components/charts/AllocationPieChart';
@@ -16,6 +16,8 @@ import { ErrorMessage } from '../features/components/ui/ErrorMessage';
 import { ChatWidget } from '../features/components/ChatWidget';
 import { DashboardHeader } from '../features/components/DashboardHeader';
 import { OtherInvestments } from '../features/pages/OtherInvestments';
+import { useAuth, useUser } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardContent: React.FC = () => {
   const [viewMode, setViewMode] = useState<'visual' | 'text'>('visual');
@@ -60,7 +62,7 @@ const DashboardContent: React.FC = () => {
               />
 
               {viewMode === 'visual' ? (
-                <>
+                <div>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <Card variant="gradient" className="lg:sticky lg:top-6">
                       <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
@@ -87,7 +89,7 @@ const DashboardContent: React.FC = () => {
                       {data.disclaimer}
                     </p>
                   </Card>
-                </>
+                </div>
               ) : (
                 <TextBasedView data={data} />
               )}
@@ -103,7 +105,50 @@ const DashboardContent: React.FC = () => {
   );
 };
 
-const DashboardPage: React.FC = () => {
+const DashboardPage = () => {
+  const { isSignedIn } = useAuth();
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const checkFormStatus = async (clerkId: string) => {
+    try {
+      const response = await fetch(`/.netlify/functions/api/check-form-status/${clerkId}`);
+      const data = await response.json();
+      return data.hasFilledForm;
+    } catch (error) {
+      console.error('Error checking form status:', error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!isSignedIn || !user) {
+        navigate('/');
+        return;
+      }
+
+      try {
+        const hasFilledForm = await checkFormStatus(user.id);
+        if (!hasFilledForm) {
+          navigate('/form');
+        }
+      } catch (error) {
+        console.error('Error checking form status:', error);
+        navigate('/form');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAccess();
+  }, [isSignedIn, user, navigate]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <ThemeProvider>
       <DashboardContent />
