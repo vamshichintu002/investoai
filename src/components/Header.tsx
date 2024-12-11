@@ -89,7 +89,14 @@ export function Header() {
           ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}
         `}
       >
-        <div className="h-full flex flex-col px-4 pt-20">
+        <div className="h-full flex flex-col px-4 pt-16">
+          <button
+            onClick={closeMenu}
+            className="absolute top-4 right-4 p-2 rounded-lg bg-foreground/5 hover:bg-foreground/10 transition-colors"
+            aria-label="Close menu"
+          >
+            <X className="w-6 h-6 text-foreground" />
+          </button>
           <Navigation mobile onNavClick={closeMenu} />
           <div className="flex flex-col space-y-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
             <AuthButtons onClose={closeMenu} />
