@@ -2,18 +2,20 @@ import React from 'react';
 import { useAuth, useClerk } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../contexts/FormContext';
+import { useAfterSignIn } from '../../hooks/useAfterSignIn';
 
 export function AuthButtons({ onClose }: { onClose?: () => void }) {
   const { isSignedIn } = useAuth();
   const { openSignIn, openSignUp } = useClerk();
   const navigate = useNavigate();
   const { hasFilledForm, isLoading, error } = useForm();
+  
+  // Use the hook to handle post-sign-in redirects
+  useAfterSignIn();
 
   const handleSignIn = () => {
     onClose?.();
-    openSignIn({
-      redirectUrl: '/',
-    });
+    openSignIn();
   };
 
   const handleSignUp = () => {
