@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --card: 217 32.6% 12%;
+    --text-primary: 210 40% 98%;
+    --text-secondary: 215 20.2% 65.1%;
+    --border: 217.2 32.6% 17.5%;
+    --hover: 217.2 32.6% 17.5%;
+  }
+}
+
+@layer components {
+  .bg-card {
+    @apply bg-[#1a1d24];
+    background-image: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  .dashboard-hover {
+    @apply bg-[#23262d] rounded-lg transition-all duration-200;
+    @apply hover:bg-[#2a2d35] hover:translate-x-0.5;
+    @apply border border-white/[0.03];
+    background-image: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0.02) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  .dashboard-text {
+    @apply text-slate-100;
+  }
+
+  .dashboard-text-secondary {
+    @apply text-slate-400;
+  }
+
+  .accent-gradient {
+    background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-sm bg-opacity-20;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-200;
+    @apply hover:-translate-y-0.5;
+  }
+
+  .card-highlight {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.03),
+      transparent
+    );
+    transition: 0.5s;
+  }
+
+  .card-highlight:hover::before {
+    left: 100%;
+  }
+}

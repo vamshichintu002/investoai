@@ -1,0 +1,46 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model users {
+  id           String        @id @default(cuid())
+  clerkId      String        @unique
+  email        String        @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  form_details form_details?
+}
+
+model form_details {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  name                String
+  phone               String
+  age                 Int
+  employmentStatus    String
+  annualIncome        Float
+  maritalStatus       String
+  selectedGoals       String[]
+  investmentHorizon   String
+  riskTolerance       String
+  riskComfortLevel    Int
+  monthlyIncome       Float
+  monthlyExpenses     Float
+  selectedInvestments String[]
+  managementStyle     String
+  lifeChangesDetails  String?
+  comments            String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  api_out_json        Json?
+  user                users    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}

@@ -1,0 +1,28 @@
+/* Investment Dashboard Styles */
+.investment-dashboard {
+  @apply w-full max-w-7xl mx-auto p-4;
+}
+
+.investment-card {
+  @apply bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-4;
+}
+
+.investment-header {
+  @apply text-2xl font-bold mb-4 text-gray-900 dark:text-white;
+}
+
+.investment-stats {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+}
+
+.stat-card {
+  @apply bg-gray-50 dark:bg-dark-input rounded-lg p-4;
+}
+
+.stat-title {
+  @apply text-sm text-gray-500 dark:text-gray-400;
+}
+
+.stat-value {
+  @apply text-xl font-semibold text-gray-900 dark:text-white mt-1;
+}
