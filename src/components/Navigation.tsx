@@ -2,8 +2,8 @@ import React from 'react';
 import { useAuth, useClerk } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../contexts/FormContext';
-import { useToast } from './ui/Toast';
 import { LogOut } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface NavItemProps {
   href: string;
@@ -58,16 +58,33 @@ export function Navigation({ mobile, onNavClick }: NavigationProps) {
   const { signOut } = useClerk();
   const navigate = useNavigate();
   const { hasFilledForm, isLoading } = useForm();
-  const { showToast } = useToast();
 
   const handleLogout = async () => {
     if (onNavClick) onNavClick();
     try {
       await signOut();
-      showToast('You have successfully logged out', 'success');
+      toast.success('Successfully logged out!', {
+        style: {
+          background: '#4CAF50',
+          color: '#fff',
+        },
+        iconTheme: {
+          primary: '#fff',
+          secondary: '#4CAF50',
+        },
+      });
       navigate('/');
     } catch (error) {
-      showToast('Error logging out. Please try again.', 'error');
+      toast.error('Failed to log out. Please try again.', {
+        style: {
+          background: '#EF4444',
+          color: '#fff',
+        },
+        iconTheme: {
+          primary: '#fff',
+          secondary: '#EF4444',
+        },
+      });
     }
   };
 

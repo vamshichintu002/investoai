@@ -9,23 +9,11 @@ export function AuthButtons({ onClose }: { onClose?: () => void }) {
   const navigate = useNavigate();
   const { hasFilledForm, isLoading, error } = useForm();
 
-  const handleSignIn = async () => {
+  const handleSignIn = () => {
     onClose?.();
-    try {
-      const result = await openSignIn();
-      if (result?.createdUserId) {
-        const response = await fetch(`/.netlify/functions/api/check-user-status/${result.createdUserId}`);
-        if (!response.ok) {
-          throw new Error('Failed to check user status');
-        }
-        const data = await response.json();
-        if (data.redirectTo) {
-          navigate(data.redirectTo);
-        }
-      }
-    } catch (error) {
-      console.error('Error during sign in:', error);
-    }
+    openSignIn({
+      redirectUrl: '/',
+    });
   };
 
   const handleSignUp = () => {
