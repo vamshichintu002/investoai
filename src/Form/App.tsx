@@ -16,7 +16,8 @@ import { FormData } from './types/form';
 import { initialFormData } from './utils/initialState';
 import { validateText, validateAmount, validateNumber, validatePhone, validateName } from './utils/validation';
 import { useNavigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
+import LoadingSequence from '../components/LoadingSequence';
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -26,6 +27,7 @@ function App() {
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showLoadingSequence, setShowLoadingSequence] = useState(false);
 
   if (!isLoaded) {
     return (
@@ -158,25 +160,32 @@ function App() {
 
     try {
       setIsSubmitting(true);
+      setShowLoadingSequence(true);
       const primaryEmail = user.primaryEmailAddress?.emailAddress;
       if (!primaryEmail) {
         throw new Error('Please verify your email address to continue.');
       }
 
       await submitForm(formData, user.id, primaryEmail);
-      alert('Form submitted successfully!');
-      navigate('/investment-dashboard');
+      window.location.href = 'https://investoaiii.netlify.app/investment-dashboard'
     } catch (error) {
       console.error('Error submitting form:', error);
       const errorMessage = error instanceof Error ? error.message : 'An error occurred while submitting the form. Please try again.';
       alert(errorMessage);
     } finally {
       setIsSubmitting(false);
+      setShowLoadingSequence(false);
     }
   };
 
   return (
     <>
+      {showLoadingSequence && (
+        <LoadingSequence 
+          isSubmitting={isSubmitting} 
+          onComplete={() => setShowLoadingSequence(false)} 
+        />
+      )}
       <Toaster position="top-right" />
       <div className="min-h-screen bg-dark p-4 md:p-6">
         <div className="max-w-2xl mx-auto">
