@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export function useAfterSignIn() {
   const { isSignedIn } = useAuth();
   const { user } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const checkUserStatus = async () => {
+      // Don't redirect if user is on the home page
+      if (location.pathname === '/') return;
+      
       if (!isSignedIn || !user) return;
 
       try {
@@ -27,5 +31,5 @@ export function useAfterSignIn() {
     };
 
     checkUserStatus();
-  }, [isSignedIn, user, navigate]);
+  }, [isSignedIn, user, navigate, location.pathname]);
 }

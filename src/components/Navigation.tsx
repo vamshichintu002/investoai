@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth, useClerk } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../contexts/FormContext';
+import { useToast } from './ui/Toast';
 import { LogOut } from 'lucide-react';
 
 interface NavItemProps {
@@ -57,11 +58,17 @@ export function Navigation({ mobile, onNavClick }: NavigationProps) {
   const { signOut } = useClerk();
   const navigate = useNavigate();
   const { hasFilledForm, isLoading } = useForm();
+  const { showToast } = useToast();
 
   const handleLogout = async () => {
     if (onNavClick) onNavClick();
-    await signOut();
-    navigate('/');
+    try {
+      await signOut();
+      showToast('You have successfully logged out', 'success');
+      navigate('/');
+    } catch (error) {
+      showToast('Error logging out. Please try again.', 'error');
+    }
   };
 
   return (

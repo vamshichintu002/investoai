@@ -2,20 +2,30 @@ import React from 'react';
 import { useAuth, useClerk } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../contexts/FormContext';
-import { useAfterSignIn } from '../../hooks/useAfterSignIn';
 
 export function AuthButtons({ onClose }: { onClose?: () => void }) {
   const { isSignedIn } = useAuth();
   const { openSignIn, openSignUp } = useClerk();
   const navigate = useNavigate();
   const { hasFilledForm, isLoading, error } = useForm();
-  
-  // Use the hook to handle post-sign-in redirects
-  useAfterSignIn();
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     onClose?.();
-    openSignIn();
+    try {
+      const result = await openSignIn();
+      if (result?.createdUserId) {
+        const response = await fetch(`/.netlify/functions/api/check-user-status/${result.createdUserId}`);
+        if (!response.ok) {
+          throw new Error('Failed to check user status');
+        }
+        const data = await response.json();
+        if (data.redirectTo) {
+          navigate(data.redirectTo);
+        }
+      }
+    } catch (error) {
+      console.error('Error during sign in:', error);
+    }
   };
 
   const handleSignUp = () => {
