@@ -1,11 +1,17 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useClerk } from '@clerk/clerk-react';
+import { useAuth } from '@clerk/clerk-react';
+import { useForm } from '../contexts/FormContext';
+import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/Button';
 import { HeroVisualization } from './HeroVisualization';
 
 export function Hero() {
   const { openSignUp } = useClerk();
+  const { isSignedIn } = useAuth();
+  const { hasFilledForm, isLoading } = useForm();
+  const navigate = useNavigate();
 
   const scrollToSection = (sectionId: string) => {
     const section = document.querySelector(sectionId);
@@ -41,9 +47,24 @@ export function Hero() {
                 variant="secondary"
                 size="lg"
                 className="bg-primary text-white hover:bg-primary/90 flex items-center justify-center w-full sm:w-auto"
-                onClick={() => openSignUp()}
+                onClick={() => {
+                  if (!isSignedIn) {
+                    openSignUp();
+                  } else {
+                    navigate(hasFilledForm ? '/investment-dashboard' : '/form');
+                  }
+                }}
+                disabled={isLoading}
               >
-                Start Investing <ArrowRight className="ml-2 h-5 w-5" />
+                {!isSignedIn ? (
+                  <>Start Investing <ArrowRight className="ml-2 h-5 w-5" /></>
+                ) : isLoading ? (
+                  'Loading...'
+                ) : (
+                  <>
+                    {hasFilledForm ? 'Go to Dashboard' : 'Go to Form'} <ArrowRight className="ml-2 h-5 w-5" />
+                  </>
+                )}
               </Button>
               <Button
                 variant="ghost"
