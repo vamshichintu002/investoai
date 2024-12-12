@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PORTFOLIO_ANALYSIS_API = 'https://loving-luck-production.up.railway.app/analyze-portfolio';
+const PORTFOLIO_ANALYSIS_API = 'https://new-fastapi-production.up.railway.app/analyze-portfolio';
 
 export async function analyzePortfolio(portfolioData: any) {
   try {
