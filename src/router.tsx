@@ -24,6 +24,15 @@ export const router = createBrowserRouter([
   },
   {
     path: '/investment-dashboard',
-    element: <DashboardPage />,
+    element: (
+      <>
+        <SignedIn>
+          <DashboardPage />
+        </SignedIn>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
+      </>
+    ),
   },
 ]);

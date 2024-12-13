@@ -106,14 +106,17 @@ const DashboardContent: React.FC = () => {
 };
 
 const DashboardPage = () => {
-  const { isSignedIn } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
   const { user } = useUser();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   const checkFormStatus = async (clerkId: string) => {
     try {
-      const response = await fetch(`/.netlify/functions/api/check-form-status/${clerkId}`);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/.netlify/functions/api/check-form-status/${clerkId}`);
+      if (!response.ok) {
+        throw new Error('Failed to check form status');
+      }
       const data = await response.json();
       return data.hasFilledForm;
     } catch (error) {
@@ -124,27 +127,44 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const checkAccess = async () => {
-      if (!isSignedIn || !user) {
+      // Wait for auth to load
+      if (!isLoaded) return;
+
+      // If not signed in, redirect to home
+      if (!isSignedIn) {
         navigate('/');
         return;
       }
+
+      // If no user, wait for it
+      if (!user) return;
 
       try {
         const hasFilledForm = await checkFormStatus(user.id);
         if (!hasFilledForm) {
           navigate('/form');
+          return;
         }
+        setIsLoading(false);
       } catch (error) {
         console.error('Error checking form status:', error);
         navigate('/form');
-      } finally {
-        setIsLoading(false);
       }
     };
 
     checkAccess();
-  }, [isSignedIn, user, navigate]);
+  }, [isLoaded, isSignedIn, user, navigate]);
 
+  // Show loading spinner while auth is loading
+  if (!isLoaded || !isSignedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  // Show loading spinner while checking form status
   if (isLoading) {
     return <LoadingSpinner />;
   }
