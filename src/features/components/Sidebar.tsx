@@ -5,7 +5,9 @@ import {
   Lightbulb,
   ChevronLeft,
   ChevronRight,
-  Coins
+  Coins,
+  MessageSquare,
+  Mail
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import clsx from 'clsx';
@@ -120,6 +122,30 @@ export function Sidebar({ isOpen, onToggle, currentPage, onPageChange }: Sidebar
                 <Coins className="w-5 h-5" />
                 <span className="font-medium">Other Investment Options</span>
               </button>
+
+              <a
+                href="https://app.youform.com/forms/gwf0371g"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={clsx(
+                  'w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors',
+                  'text-foreground hover:bg-accent/10'
+                )}
+              >
+                <MessageSquare className="w-5 h-5" />
+                <span className="font-medium">Give Feedback</span>
+              </a>
+
+              <a
+                href="mailto:Themaveric100x@hotmail.com"
+                className={clsx(
+                  'w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors',
+                  'text-foreground hover:bg-accent/10'
+                )}
+              >
+                <Mail className="w-5 h-5" />
+                <span className="font-medium">Contact Us</span>
+              </a>
             </nav>
           </div>
 

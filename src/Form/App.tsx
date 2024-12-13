@@ -167,7 +167,9 @@ function App() {
       }
 
       await submitForm(formData, user.id, primaryEmail);
-      navigate('/investment-dashboard');
+      setTimeout(() => {
+        window.location.href = 'https://investoaiii.netlify.app/investment-dashboard';
+      }, 5000); 
     } catch (error) {
       console.error('Error submitting form:', error);
       const errorMessage = error instanceof Error ? error.message : 'An error occurred while submitting the form. Please try again.';
